@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://softglow.github.io/sitemap.xml 
