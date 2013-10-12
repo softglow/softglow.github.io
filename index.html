@@ -139,13 +139,13 @@ back to PSRAM and destroy the code/instruments under emulation.</p>
 <p>higan does threading (when threaded) by using its built-in public domain
 <code>libco</code> (coroutine, I presume) library.  But if you just look at
 <code>sfc/smp/smp.cpp</code> you will find some synchronization functions, but no
-callers&hellip;. right there.  And the obvious ones like <code>step()</code> don&rsquo;t seem to do
+callers&hellip; right there.  And the obvious ones like <code>step()</code> don&rsquo;t seem to do
 much.</p>
 
 <p>There are some more functions in <code>sfc/smp/timing/timing.cpp</code>, but that turns
 out to be a <em>very small</em> file, because it&rsquo;s just providing some more sync
 functions to be called.  The real synchronization is driven from the
-<strong>memory</strong> files, <code>sfc/smp/memory/memory.cpp</code>&hellip;</p>
+<strong>memory</strong> files, <code>sfc/smp/memory/memory.cpp</code>.  Quoting my notes:</p>
 
 <pre><code>step(clocks): adjusts clocks only, no sync
 cycle_edge: tick SMP timers
