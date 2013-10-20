@@ -9,9 +9,9 @@
   <meta name="author" content="softglow">
 
   
-  <meta name="description" content="Continuing our discussion of higan from
-yesterday, let’s
-take a moment to look deeper into the abyss. SMP::Threaded This isn’t pthreads or anything; &hellip;">
+  <meta name="description" content="Most QT resources seem to want me to use higher-level classes like
+QMediaPlayer or QSoundEffect to point at extant files or possibly a
+QAudioBuffer &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,126 @@ take a moment to look deeper into the abyss. SMP::Threaded This isn’t pthreads
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/20/on-qaudiooutput/">On QAudioOutput</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-20T16:31:00-04:00" pubdate data-updated="true">Oct 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Most QT resources seem to want me to use higher-level classes like
+<code>QMediaPlayer</code> or <code>QSoundEffect</code> to point at extant files or <em>possibly</em> a
+<code>QAudioBuffer</code> which is already filled with a <code>QByteArray</code>.  There&rsquo;s really
+not much out there about <strong>synthesizing</strong> audio and playing it straight
+through a <code>QAudioDevice</code>.</p>
+
+<p>The latter may operate in push mode or pull mode; the docs will tell you as
+much.  What may be less obvious is <em>how</em> those modes are chosen.  It&rsquo;s simply
+your choice of overloaded method:</p>
+
+<pre><code>QIODevice QAudioOutput::start(); // push mode
+void QAudioOutput::start(QIODevice *dev); // pull mode
+</code></pre>
+
+<p>Looking over the pre-made classes that implement <code>QIODevice</code>, I notice that
+they love to tell you when <em>data is ready to read</em> but not <em>when data may be
+written.</em>  And in <strong>both</strong> modes, the <code>QAudioOutput</code> is doing the reading and
+your application needs to know, somehow, when it should write.</p>
+
+<p>So, I implemented my own <code>QIODevice</code> around my own buffer type.  The class
+actually holds a pair of buffers, one being written by the generator thread
+and one being read by <code>QAudioOutput</code>.  When both are finished, the buffers are
+swapped.  Whenever the output calls <code>read</code>, I format data from the app&rsquo;s
+buffer into bytes, directly into the output pointer.</p>
+
+<p>And actually, nobody calls write.  The generator can be connected directly to
+the app buffer, which provides its own <code>append()</code> method that consumes
+(potentially many) <code>snd_sample_t</code>s.</p>
+
+<p>There are a pair of signals and slots each side uses to communicate about
+their shared buffer:</p>
+
+<pre><code>class SndIO : public QIODevice {
+    Q_OBJECT
+    ...
+public slots:
+    void writeComplete(SndBuf *buf);
+signals:
+    void readyWrite(SndBuf *buf);
+    void emptied();
+    void underrun();
+}
+class SndThread : public QObject {
+    Q_OBJECT
+    ...
+public slots:
+    void start(SndBuf *buf);
+signals:
+    void finished(SndBuf *buf);
+}
+</code></pre>
+
+<p>The main thread then connects <code>SndIO::readyWrite</code> to <code>SndThread::start</code> and
+<code>SndThread::finished</code> to <code>SndIO::writeComplete</code>.  The SndBuf itself isn&rsquo;t used
+simultaneously by multiple threads, because the IO won&rsquo;t touch it until the
+Thread has signaled that it has finished filling it.</p>
+
+<p>This produces a four-state system, starting with &ldquo;both buffers empty&rdquo; before
+the main thread wires the objects and initiates the first fill on the IO.</p>
+
+<pre><code>1. empty/empty
+2. empty/filling
+3. draining/filling
+4. draining/full
+</code></pre>
+
+<p>When state 2 emits finished, state 3 begins; emission of emptied there returns
+to state 2, otherwise, finished happens again and state 4 is entered.  From
+state 4, the only move is back to state 3 when the emptied signal is emitted.
+After the initialization period (once state 3 has been entered for the first
+time), it&rsquo;s possible for state 2 to receive another read from the
+<code>QAudioOutput</code>; this emits the underrun signal without changing state.</p>
+
+<p>This is a actually a slightly-more-complex version of the producer/consumer
+problem.  Instead of a single producer and consumer directly communicating,
+there is an intervening <code>QIODevice</code> carrying data across threads, consuming
+the generator&rsquo;s output, then marshaling and producing it for the output to
+consume.</p>
+
+<p>I&rsquo;m also effectively using signals and slots to let the event loop block the
+producer when it gets too far ahead.  When that happens, no &ldquo;produce more&rdquo;
+signal is delivered until the output can catch up.</p>
+
+<p>All that said, this setup <em>compiles</em> but I haven&rsquo;t finished wrapping a test
+program around it yet.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -342,6 +462,10 @@ finishing this library.</p>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/20/on-qaudiooutput/">On QAudioOutput</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/13/libco-sync-via-calling/">Libco: Sync via Calling Without Endless Recursion</a>
