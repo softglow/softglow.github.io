@@ -5,14 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - softglow's notebook</title>
+  <title>Progress Report - softglow's notebook</title>
   <meta name="author" content="softglow">
 
   
-  <meta name="description" content="Blog Archive 2013 Progress Report
-Oct 24 2013 On QAudioOutput
-Oct 20 2013 libco: Sync via Calling without Endless Recursion
-Oct 13 2013 &hellip;">
+  <meta name="description" content="I got the buffer passing code that I described
+on Sunday running. It&rsquo;s important that
+if you&rsquo;re not going to call QIODevice::write to put &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +20,7 @@ Oct 13 2013 &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://softglow.github.io/blog/archives">
+  <link rel="canonical" href="http://softglow.github.io/blog/2013/10/24/progress-report">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="softglow's notebook" type="application/atom+xml">
@@ -67,61 +66,104 @@ Oct 13 2013 &hellip;">
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      <h1 class="entry-title">Progress Report</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-24T20:02:00-04:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
 
 
+<div class="entry-content"><p>I got the buffer passing code that I described
+<a href="/blog/2013/10/20/on-qaudiooutput/">on Sunday</a> running.  It&rsquo;s important that
+if you&rsquo;re not going to call <code>QIODevice::write</code> to put data into the
+device&mdash;because, say, you&rsquo;re swapping in a buffer and converting it at
+<code>read()</code> time because, um, you&rsquo;re just doing it wrong&mdash;that you emit the
+<code>readyRead</code> and <code>bytesWritten</code> signals yourself when you swap in a buffer.
+Otherwise, the audio output never gets signaled that the device is readable,
+and stops output after a timeout.</p>
 
-  
-  <h2>2013</h2>
+<p>&lt;/tangent&gt;</p>
 
-<article>
-  
-<h1><a href="/blog/2013/10/24/progress-report/">Progress Report</a></h1>
-<time datetime="2013-10-24T20:02:00-04:00" pubdate><span class='month'>Oct</span> <span class='day'>24</span> <span class='year'>2013</span></time>
+<p>It turns out that the tone generator I&rsquo;ve connected for testing (to stand in
+for higan) is broken.  Completely busted.  It produces an infinite number of
+repetitions of:</p>
 
+<pre><code>0
+0
+-32768
+-32768
+</code></pre>
 
-</article>
+<p>That is <strong>not</strong> a triangle wave.  And since no horrible howl comes out of my
+speakers, either the audio output stage is also broken, or something is
+detecting &ldquo;this makes no sense&rdquo; and sparing my ears.</p>
 
-
-
-<article>
-  
-<h1><a href="/blog/2013/10/20/on-qaudiooutput/">On QAudioOutput</a></h1>
-<time datetime="2013-10-20T16:31:00-04:00" pubdate><span class='month'>Oct</span> <span class='day'>20</span> <span class='year'>2013</span></time>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/10/13/libco-sync-via-calling/">libco: Sync via Calling without Endless Recursion</a></h1>
-<time datetime="2013-10-13T18:37:00-04:00" pubdate><span class='month'>Oct</span> <span class='day'>13</span> <span class='year'>2013</span></time>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/10/12/synchronization-in-higan-smp-slash-dsp/">Synchronization in higan (SMP/DSP)</a></h1>
-<time datetime="2013-10-12T16:04:00-04:00" pubdate><span class='month'>Oct</span> <span class='day'>12</span> <span class='year'>2013</span></time>
-
-
-</article>
-
+<p>Oh well.  If I&rsquo;m lucky enough, <em>maybe</em> I&rsquo;ll get to the point where I have an
+SPC player using higan&rsquo;s audio engine by 2014.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">softglow</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-24T20:02:00-04:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://softglow.github.io/blog/2013/10/24/progress-report/" data-via="" data-counturl="http://softglow.github.io/blog/2013/10/24/progress-report/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/20/on-qaudiooutput/" title="Previous Post: On QAudioOutput">&laquo; On QAudioOutput</a>
+      
+      
+    </p>
+  </footer>
 </article>
 
 </div>

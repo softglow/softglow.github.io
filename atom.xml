@@ -4,7 +4,7 @@
   <title><![CDATA[softglow's notebook]]></title>
   <link href="http://softglow.github.io/atom.xml" rel="self"/>
   <link href="http://softglow.github.io/"/>
-  <updated>2013-10-20T19:48:46-04:00</updated>
+  <updated>2013-10-24T20:20:43-04:00</updated>
   <id>http://softglow.github.io/</id>
   <author>
     <name><![CDATA[softglow]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Progress Report]]></title>
+    <link href="http://softglow.github.io/blog/2013/10/24/progress-report/"/>
+    <updated>2013-10-24T20:02:00-04:00</updated>
+    <id>http://softglow.github.io/blog/2013/10/24/progress-report</id>
+    <content type="html"><![CDATA[<p>I got the buffer passing code that I described
+<a href="http://softglow.github.io/blog/2013/10/20/on-qaudiooutput/">on Sunday</a> running.  It&rsquo;s important that
+if you&rsquo;re not going to call <code>QIODevice::write</code> to put data into the
+device&mdash;because, say, you&rsquo;re swapping in a buffer and converting it at
+<code>read()</code> time because, um, you&rsquo;re just doing it wrong&mdash;that you emit the
+<code>readyRead</code> and <code>bytesWritten</code> signals yourself when you swap in a buffer.
+Otherwise, the audio output never gets signaled that the device is readable,
+and stops output after a timeout.</p>
+
+<p>&lt;/tangent&gt;</p>
+
+<p>It turns out that the tone generator I&rsquo;ve connected for testing (to stand in
+for higan) is broken.  Completely busted.  It produces an infinite number of
+repetitions of:</p>
+
+<pre><code>0
+0
+-32768
+-32768
+</code></pre>
+
+<p>That is <strong>not</strong> a triangle wave.  And since no horrible howl comes out of my
+speakers, either the audio output stage is also broken, or something is
+detecting &ldquo;this makes no sense&rdquo; and sparing my ears.</p>
+
+<p>Oh well.  If I&rsquo;m lucky enough, <em>maybe</em> I&rsquo;ll get to the point where I have an
+SPC player using higan&rsquo;s audio engine by 2014.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[On QAudioOutput]]></title>
