@@ -4,7 +4,7 @@
   <title><![CDATA[softglow's notebook]]></title>
   <link href="http://softglow.github.io/atom.xml" rel="self"/>
   <link href="http://softglow.github.io/"/>
-  <updated>2013-10-24T20:20:43-04:00</updated>
+  <updated>2013-10-26T14:21:30-04:00</updated>
   <id>http://softglow.github.io/</id>
   <author>
     <name><![CDATA[softglow]]></name>
@@ -12,6 +12,32 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SndThread Lives]]></title>
+    <link href="http://softglow.github.io/blog/2013/10/26/sndthread-lives/"/>
+    <updated>2013-10-26T14:09:00-04:00</updated>
+    <id>http://softglow.github.io/blog/2013/10/26/sndthread-lives</id>
+    <content type="html"><![CDATA[<p>I wrote that I had the thread buffer handoff working correctly.  Hah.  Ha!
+HAHAHAHAHAHA!</p>
+
+<p><em>Now</em> it works.  I got a thin, quiet, reedy whine out of it last night, and
+today, I tracked down the final bug: the IO formatter was shifting the wrong
+direction, thus turning a sample like <code>3560</code> into output bytes <code>6000</code> because
+<code>350000 &amp; ff</code> (the implicit conversion to byte) is zero.</p>
+
+<p><img src="http://softglow.github.io/blog/images/2013/10/audacity-triangle-zero.png" width="780" height="620"></p>
+
+<p>This started life as a triangle wave, but when I got a bad sound, I tried
+&lsquo;flattening&rsquo; the peaks out to put in more sound power and make it fuller.
+This did not work.  Not only was sound power unimportant, but instead of
+holding the <em>peak</em> value, it holds <em>zero.</em></p>
+
+<p>But, since this bug is clearly in the generator and the rest of the output
+chain <strong>is</strong> working to suit me, I&rsquo;m going to leave it unfixed and move on to
+connecting higan&rsquo;s SMP/DSP subsystem in place of my broken generator.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Progress Report]]></title>

@@ -9,9 +9,8 @@
   <meta name="author" content="softglow">
 
   
-  <meta name="description" content="I got the buffer passing code that I described
-on Sunday running. It&rsquo;s important that
-if you&rsquo;re not going to call QIODevice::write to put &hellip;">
+  <meta name="description" content="I wrote that I had the thread buffer handoff working correctly. Hah. Ha!
+HAHAHAHAHAHA! Now it works. I got a thin, quiet, reedy whine out of it last &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +66,59 @@ if you&rsquo;re not going to call QIODevice::write to put &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/26/sndthread-lives/">SndThread Lives</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-26T14:09:00-04:00" pubdate data-updated="true">Oct 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I wrote that I had the thread buffer handoff working correctly.  Hah.  Ha!
+HAHAHAHAHAHA!</p>
+
+<p><em>Now</em> it works.  I got a thin, quiet, reedy whine out of it last night, and
+today, I tracked down the final bug: the IO formatter was shifting the wrong
+direction, thus turning a sample like <code>3560</code> into output bytes <code>6000</code> because
+<code>350000 &amp; ff</code> (the implicit conversion to byte) is zero.</p>
+
+<p><img src="/blog/images/2013/10/audacity-triangle-zero.png" width="780" height="620"></p>
+
+<p>This started life as a triangle wave, but when I got a bad sound, I tried
+&lsquo;flattening&rsquo; the peaks out to put in more sound power and make it fuller.
+This did not work.  Not only was sound power unimportant, but instead of
+holding the <em>peak</em> value, it holds <em>zero.</em></p>
+
+<p>But, since this bug is clearly in the generator and the rest of the output
+chain <strong>is</strong> working to suit me, I&rsquo;m going to leave it unfixed and move on to
+connecting higan&rsquo;s SMP/DSP subsystem in place of my broken generator.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -524,6 +576,10 @@ finishing this library.</p>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/26/sndthread-lives/">SndThread Lives</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/24/progress-report/">Progress Report</a>
