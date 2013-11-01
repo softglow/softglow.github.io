@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>SndThread Lives - softglow's notebook</title>
+  <title>Brief Intermission - softglow's notebook</title>
   <meta name="author" content="softglow">
 
   
-  <meta name="description" content="I wrote that I had the thread buffer handoff working correctly. Hah. Ha!
-HAHAHAHAHAHA! Now it works. I got a thin, quiet, reedy whine out of it last &hellip;">
+  <meta name="description" content="No progress is expected this week. I&rsquo;m taking the week off to catch up on
+some other things around the house. I&rsquo;m disappointed, actually &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@ HAHAHAHAHAHA! Now it works. I got a thin, quiet, reedy whine out of it last &hel
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://softglow.github.io/blog/2013/10/26/sndthread-lives">
+  <link rel="canonical" href="http://softglow.github.io/blog/2013/10/31/brief-intermission">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="softglow's notebook" type="application/atom+xml">
@@ -69,7 +69,7 @@ HAHAHAHAHAHA! Now it works. I got a thin, quiet, reedy whine out of it last &hel
   
   <header>
     
-      <h1 class="entry-title">SndThread Lives</h1>
+      <h1 class="entry-title">Brief Intermission</h1>
     
     
       <p class="meta">
@@ -85,31 +85,20 @@ HAHAHAHAHAHA! Now it works. I got a thin, quiet, reedy whine out of it last &hel
   
 
 
-<time datetime="2013-10-26T14:09:00-04:00" pubdate data-updated="true">Oct 26<span>th</span>, 2013</time>
+<time datetime="2013-10-31T21:04:00-04:00" pubdate data-updated="true">Oct 31<span>st</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I wrote that I had the thread buffer handoff working correctly.  Hah.  Ha!
-HAHAHAHAHAHA!</p>
+<div class="entry-content"><p>No progress is expected this week.  I&rsquo;m taking the week off to catch up on
+some other things around the house.</p>
 
-<p><em>Now</em> it works.  I got a thin, quiet, reedy whine out of it last night, and
-today, I tracked down the final bug: the IO formatter was shifting the wrong
-direction, thus turning a sample like <code>3560</code> into output bytes <code>6000</code> because
-<code>350000 &amp; ff</code> (the implicit conversion to byte) is zero.</p>
-
-<p><img src="/blog/images/2013/10/audacity-triangle-zero.png" width="780" height="620"></p>
-
-<p>This started life as a triangle wave, but when I got a bad sound, I tried
-&lsquo;flattening&rsquo; the peaks out to put in more sound power and make it fuller.
-This did not work.  Not only was sound power unimportant, but instead of
-holding the <em>peak</em> value, it holds <em>zero.</em></p>
-
-<p>But, since this bug is clearly in the generator and the rest of the output
-chain <strong>is</strong> working to suit me, I&rsquo;m going to leave it unfixed and move on to
-connecting higan&rsquo;s SMP/DSP subsystem in place of my broken generator.</p>
+<p>I&rsquo;m disappointed, actually.  I wanted to have <em>higan</em> connected by the end of
+October, not just a stupid triangle wave generator.  (Which is the easiest
+waveform to program&mdash;since <code>dy/dt = C</code>, all you need is a fixed delta that
+gets its sign inverted when reaching the edge of the range.)</p>
 </div>
 
 
@@ -132,7 +121,7 @@ connecting higan&rsquo;s SMP/DSP subsystem in place of my broken generator.</p>
   
 
 
-<time datetime="2013-10-26T14:09:00-04:00" pubdate data-updated="true">Oct 26<span>th</span>, 2013</time>
+<time datetime="2013-10-31T21:04:00-04:00" pubdate data-updated="true">Oct 31<span>st</span>, 2013</time>
       
 
 
@@ -140,7 +129,7 @@ connecting higan&rsquo;s SMP/DSP subsystem in place of my broken generator.</p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://softglow.github.io/blog/2013/10/26/sndthread-lives/" data-via="" data-counturl="http://softglow.github.io/blog/2013/10/26/sndthread-lives/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://softglow.github.io/blog/2013/10/31/brief-intermission/" data-via="" data-counturl="http://softglow.github.io/blog/2013/10/31/brief-intermission/" >Tweet</a>
   
   
   
@@ -149,10 +138,8 @@ connecting higan&rsquo;s SMP/DSP subsystem in place of my broken generator.</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/10/24/progress-report/" title="Previous Post: Progress Report">&laquo; Progress Report</a>
+        <a class="basic-alignment left" href="/blog/2013/10/26/sndthread-lives/" title="Previous Post: SndThread Lives">&laquo; SndThread Lives</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/10/31/brief-intermission/" title="Next Post: Brief Intermission">Brief Intermission &raquo;</a>
       
     </p>
   </footer>
