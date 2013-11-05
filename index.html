@@ -9,8 +9,8 @@
   <meta name="author" content="softglow">
 
   
-  <meta name="description" content="No progress is expected this week. I&rsquo;m taking the week off to catch up on
-some other things around the house. I&rsquo;m disappointed, actually &hellip;">
+  <meta name="description" content="Just a quick note, since privileged is actually not a C++ keyword, the
+thought finally crossed my mind: what if it&rsquo;s a macro? One quick grep &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,57 @@ some other things around the house. I&rsquo;m disappointed, actually &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/04/solved-the-mystery-of-privilege/">Solved: The Mystery of Privilege</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-04T19:30:00-05:00" pubdate data-updated="true">Nov 4<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Just a quick note, since <code>privileged</code> is actually not a C++ keyword, the
+thought <em>finally</em> crossed my mind: what if it&rsquo;s a macro?</p>
+
+<p>One quick grep later, there was one match in <code>emulator/emulator.hpp</code> line
+72-76 (for anyone who hasn&rsquo;t read the whole blog, this is the higan v093
+source I&rsquo;m talking about):</p>
+
+<pre><code>#if defined(DEBUGGER)
+    #define privileged public
+#else
+    #define privileged private
+#endif
+</code></pre>
+
+<p>Yeah, it looks like a good day to be humble about my programming ability.  It
+only took me, like, a <em>month</em> to come up with that idea.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -620,6 +671,10 @@ finishing this library.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/04/solved-the-mystery-of-privilege/">Solved: The Mystery of Privilege</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/31/brief-intermission/">Brief Intermission</a>
       </li>
     
@@ -633,10 +688,6 @@ finishing this library.</p>
     
       <li class="post">
         <a href="/blog/2013/10/20/on-qaudiooutput/">On QAudioOutput</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/13/libco-sync-via-calling/">Libco: Sync via Calling Without Endless Recursion</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[softglow's notebook]]></title>
   <link href="http://softglow.github.io/atom.xml" rel="self"/>
   <link href="http://softglow.github.io/"/>
-  <updated>2013-10-31T21:22:41-04:00</updated>
+  <updated>2013-11-04T19:38:20-05:00</updated>
   <id>http://softglow.github.io/</id>
   <author>
     <name><![CDATA[softglow]]></name>
@@ -12,6 +12,30 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Solved: The Mystery of Privilege]]></title>
+    <link href="http://softglow.github.io/blog/2013/11/04/solved-the-mystery-of-privilege/"/>
+    <updated>2013-11-04T19:30:00-05:00</updated>
+    <id>http://softglow.github.io/blog/2013/11/04/solved-the-mystery-of-privilege</id>
+    <content type="html"><![CDATA[<p>Just a quick note, since <code>privileged</code> is actually not a C++ keyword, the
+thought <em>finally</em> crossed my mind: what if it&rsquo;s a macro?</p>
+
+<p>One quick grep later, there was one match in <code>emulator/emulator.hpp</code> line
+72-76 (for anyone who hasn&rsquo;t read the whole blog, this is the higan v093
+source I&rsquo;m talking about):</p>
+
+<pre><code>#if defined(DEBUGGER)
+    #define privileged public
+#else
+    #define privileged private
+#endif
+</code></pre>
+
+<p>Yeah, it looks like a good day to be humble about my programming ability.  It
+only took me, like, a <em>month</em> to come up with that idea.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Brief Intermission]]></title>
