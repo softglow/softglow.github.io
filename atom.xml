@@ -4,7 +4,7 @@
   <title><![CDATA[softglow's notebook]]></title>
   <link href="http://softglow.github.io/atom.xml" rel="self"/>
   <link href="http://softglow.github.io/"/>
-  <updated>2013-11-04T19:38:20-05:00</updated>
+  <updated>2013-11-07T21:18:22-05:00</updated>
   <id>http://softglow.github.io/</id>
   <author>
     <name><![CDATA[softglow]]></name>
@@ -12,6 +12,79 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Where the Samples Are]]></title>
+    <link href="http://softglow.github.io/blog/2013/11/07/where-the-samples-are/"/>
+    <updated>2013-11-07T20:58:00-05:00</updated>
+    <id>http://softglow.github.io/blog/2013/11/07/where-the-samples-are</id>
+    <content type="html"><![CDATA[<p>Looking at the <a href="http://byuu.org/higan/">higan</a> v093 source, it&rsquo;s fairly
+obvious where the DSP code lives, but how does the sound escape it?</p>
+
+<h2>Sending samples to the Interface</h2>
+
+<p>In the performance profile, the process actually begins down in <code>echo_27()</code>,
+implemented in <code>sfc/dsp/echo.cpp</code>.  It is there that the elusive
+<code>audio.sample()</code> method is called, which is part of Audio, over in
+<code>sfc/system/audio.cpp</code>.  In the case where there&rsquo;s no coprocessor, it passes
+directly into <code>interface-&gt;audioSample</code>.</p>
+
+<p>In the complicated case where there <em>is</em> a coprocessor, then the audio heads
+into a DSP buffer, to be averaged in <code>audio.flush()</code> with the coprocessor&rsquo;s
+buffer; the final samples are clamped to 16 bits and finally routed through
+the same <code>interface-&gt;audioSample</code> there.</p>
+
+<h2>Interface</h2>
+
+<p>Sharp eyes will have noticed the arrow operator, indicating that <code>interface</code>
+is a pointer.  It&rsquo;s a pointer to the binding of the current interface, which
+is to say: it&rsquo;s a <code>Interface *interface</code> where the type is <code>struct Interface :
+Emulator::Interface::Bind</code>.</p>
+
+<p>Looking from the outside in, <code>target-ethos/bootstrap.cpp</code> creates the
+binding-interface, creates and appends all the known <em>system</em> emulators to a
+vector, then iterates over the vector to set each system emulator&rsquo;s binding to
+the single global binding that it <em>just</em> created.</p>
+
+<p>Although <code>audioSample</code> is virtual, I haven&rsquo;t found anything yet which actually
+overrides it.</p>
+
+<h2>audioSample &amp; dspaudio</h2>
+
+<p>The implementation of audioSample in <code>target-ethos/interface/interface.cpp</code>
+does very little:</p>
+
+<pre><code>signed samples[] = {lsample, rsample};
+dspaudio.sample(samples);
+while(dspaudio.pending()) {
+    dspaudio.read(samples);
+    audio.sample(samples[0], samples[1]);
+}
+</code></pre>
+
+<p>The <code>dspaudio</code> is a <code>nall::DSP</code> declared in <code>target-ethos/ethos.cpp</code> and
+implemented in <code>nall/dsp/core.hpp</code>.  Pretty much, samples go into the DSP,
+they get resampled to the output sample rate, and then those results can be
+read out again.</p>
+
+<p>The trick here is that the <code>audio</code> visible in <em>this particular scope</em> is
+actually <code>AudioInterface audio</code> from <code>ruby/ruby.cpp</code>.  Platform audio drivers
+live under <code>ruby/audio/*.cpp</code> and <code>AudioInterface::sample</code> passes the samples
+along to whatever driver happens to be connected.</p>
+
+<h2>tl;dr</h2>
+
+<p>If the madness hasn&rsquo;t taken me:</p>
+
+<ol>
+<li>The system DSP produces samples and passes it into the system audio chain.</li>
+<li>The system audio chain passes samples into the platform interface.</li>
+<li>The platform interface pumps samples through the resampler.</li>
+<li>The resulting samples are pushed into the platform audio driver.</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Solved: The Mystery of Privilege]]></title>
