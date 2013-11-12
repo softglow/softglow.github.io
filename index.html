@@ -100,8 +100,8 @@ obvious where the DSP code lives, but how does the sound escape it?</p>
 
 <h2>Sending samples to the Interface</h2>
 
-<p>In the performance profile, the process actually begins down in <code>echo_27()</code>,
-implemented in <code>sfc/dsp/echo.cpp</code>.  It is there that the elusive
+<p>In the <del>performance</del> accuracy profile, the process actually begins down in
+<code>echo_27()</code>, implemented in <code>sfc/dsp/echo.cpp</code>.  It is there that the elusive
 <code>audio.sample()</code> method is called, which is part of Audio, over in
 <code>sfc/system/audio.cpp</code>.  In the case where there&rsquo;s no coprocessor, it passes
 directly into <code>interface-&gt;audioSample</code>.</p>

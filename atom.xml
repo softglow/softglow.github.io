@@ -4,7 +4,7 @@
   <title><![CDATA[softglow's notebook]]></title>
   <link href="http://softglow.github.io/atom.xml" rel="self"/>
   <link href="http://softglow.github.io/"/>
-  <updated>2013-11-07T21:18:22-05:00</updated>
+  <updated>2013-11-11T20:09:52-05:00</updated>
   <id>http://softglow.github.io/</id>
   <author>
     <name><![CDATA[softglow]]></name>
@@ -23,8 +23,8 @@ obvious where the DSP code lives, but how does the sound escape it?</p>
 
 <h2>Sending samples to the Interface</h2>
 
-<p>In the performance profile, the process actually begins down in <code>echo_27()</code>,
-implemented in <code>sfc/dsp/echo.cpp</code>.  It is there that the elusive
+<p>In the <del>performance</del> accuracy profile, the process actually begins down in
+<code>echo_27()</code>, implemented in <code>sfc/dsp/echo.cpp</code>.  It is there that the elusive
 <code>audio.sample()</code> method is called, which is part of Audio, over in
 <code>sfc/system/audio.cpp</code>.  In the case where there&rsquo;s no coprocessor, it passes
 directly into <code>interface-&gt;audioSample</code>.</p>
