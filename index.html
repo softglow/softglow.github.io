@@ -9,8 +9,8 @@
   <meta name="author" content="softglow">
 
   
-  <meta name="description" content="Looking at the higan v093 source, it&rsquo;s fairly
-obvious where the DSP code lives, but how does the sound escape it? Sending samples to the &hellip;">
+  <meta name="description" content="In higan&rsquo;s sfc/alt/dsp directory is the alternate SMP emulation core, used
+when the accuracy profile isn&rsquo;t selected. It apparently &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,59 @@ obvious where the DSP code lives, but how does the sound escape it? Sending samp
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/12/maybe-ive-been-wasting-my-time/">Maybe I&#8217;ve Been Wasting My Time?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-12T20:17:00-05:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In higan&rsquo;s <code>sfc/alt/dsp</code> directory is the alternate SMP emulation core, used
+when the accuracy profile isn&rsquo;t selected.  It apparently depends on a couple
+of <a href="http://slack.net/~ant/libs/audio.html">Blargg&rsquo;s audio libraries</a> which
+includes&hellip; &ldquo;snes_spc-0.9.0&rdquo;.  Of which blargg boasts:</p>
+
+<blockquote><p>The accurate DSP passes over a hundred strenuous timing and behavior
+validation tests that were also run on the SNES. As far as I know, it&rsquo;s the
+first DSP emulator with cycle accuracy, properly emulating every DSP
+register and memory access at the exact SPC cycle it occurs at&hellip;</p></blockquote>
+
+<p>And of course, <em>this</em> is already written as a library, meant to be used in
+another project.  No games required.</p>
+
+<p>My only question is: if <code>snes_spc</code> is <em>that</em> accurate, why does higan not use
+it in accuracy mode for its own accuracy profile?  Is byuu&rsquo;s DSP somehow more
+accurate?  (I suspect so.  It&rsquo;s not like <code>snes_spc</code> is a fast-moving target,
+as its first public release is also, AFAICT, its only one.)  I don&rsquo;t want to
+commit one way or the other without an answer&hellip;</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -771,6 +824,10 @@ finishing this library.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/12/maybe-ive-been-wasting-my-time/">Maybe I&#8217;ve Been Wasting My Time?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/07/where-the-samples-are/">Where the Samples Are</a>
       </li>
     
@@ -784,10 +841,6 @@ finishing this library.</p>
     
       <li class="post">
         <a href="/blog/2013/10/26/sndthread-lives/">SndThread Lives</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/24/progress-report/">Progress Report</a>
       </li>
     
   </ul>

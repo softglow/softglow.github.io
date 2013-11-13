@@ -4,7 +4,7 @@
   <title><![CDATA[softglow's notebook]]></title>
   <link href="http://softglow.github.io/atom.xml" rel="self"/>
   <link href="http://softglow.github.io/"/>
-  <updated>2013-11-11T20:09:52-05:00</updated>
+  <updated>2013-11-12T20:26:44-05:00</updated>
   <id>http://softglow.github.io/</id>
   <author>
     <name><![CDATA[softglow]]></name>
@@ -12,6 +12,32 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Maybe I've been wasting my time?]]></title>
+    <link href="http://softglow.github.io/blog/2013/11/12/maybe-ive-been-wasting-my-time/"/>
+    <updated>2013-11-12T20:17:00-05:00</updated>
+    <id>http://softglow.github.io/blog/2013/11/12/maybe-ive-been-wasting-my-time</id>
+    <content type="html"><![CDATA[<p>In higan&rsquo;s <code>sfc/alt/dsp</code> directory is the alternate SMP emulation core, used
+when the accuracy profile isn&rsquo;t selected.  It apparently depends on a couple
+of <a href="http://slack.net/~ant/libs/audio.html">Blargg&rsquo;s audio libraries</a> which
+includes&hellip; &ldquo;snes_spc-0.9.0&rdquo;.  Of which blargg boasts:</p>
+
+<blockquote><p>The accurate DSP passes over a hundred strenuous timing and behavior
+validation tests that were also run on the SNES. As far as I know, it&rsquo;s the
+first DSP emulator with cycle accuracy, properly emulating every DSP
+register and memory access at the exact SPC cycle it occurs at&hellip;</p></blockquote>
+
+<p>And of course, <em>this</em> is already written as a library, meant to be used in
+another project.  No games required.</p>
+
+<p>My only question is: if <code>snes_spc</code> is <em>that</em> accurate, why does higan not use
+it in accuracy mode for its own accuracy profile?  Is byuu&rsquo;s DSP somehow more
+accurate?  (I suspect so.  It&rsquo;s not like <code>snes_spc</code> is a fast-moving target,
+as its first public release is also, AFAICT, its only one.)  I don&rsquo;t want to
+commit one way or the other without an answer&hellip;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Where the Samples Are]]></title>
