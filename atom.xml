@@ -4,7 +4,7 @@
   <title><![CDATA[softglow's notebook]]></title>
   <link href="http://softglow.github.io/atom.xml" rel="self"/>
   <link href="http://softglow.github.io/"/>
-  <updated>2013-11-12T20:26:44-05:00</updated>
+  <updated>2013-11-14T21:25:30-05:00</updated>
   <id>http://softglow.github.io/</id>
   <author>
     <name><![CDATA[softglow]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[DSP Emulators]]></title>
+    <link href="http://softglow.github.io/blog/2013/11/14/dsp-emulators/"/>
+    <updated>2013-11-14T21:15:00-05:00</updated>
+    <id>http://softglow.github.io/blog/2013/11/14/dsp-emulators</id>
+    <content type="html"><![CDATA[<p>I was reading around byuu&rsquo;s forum (technically, preparing to make sure my
+question regarding the accuracy of byuu&rsquo;s SMP/DSP vs. blargg&rsquo;s was in the
+right sub-forum) when I came upon the answer to my question.</p>
+
+<p>To summarize into a a perfect viral posting for social sites&hellip;</p>
+
+<h2>TIL: 3 Amazing Facts About SNES Audio Emulators</h2>
+
+<ol>
+<li>blargg&rsquo;s DSP is 100% pure awesome.</li>
+<li>byuu&rsquo;s SMP is better than blargg&rsquo;s, though.</li>
+<li>byuu&rsquo;s <em>main</em> SMP only has style points over the <em>alt</em> SMP core.  E.g. it
+emulates the <code>TEST</code> register which nobody uses.</li>
+</ol>
+
+
+<h2>So was I wasting my time?</h2>
+
+<p>Partly.  I think extracting <code>sfc/alt/{smp,dsp}</code> is the way to go, which makes
+the deep dive on the main cores mostly irrelevant, but I still got an overview
+of how higan is structured and how its audio path fits in.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Maybe I've been wasting my time?]]></title>

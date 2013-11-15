@@ -9,8 +9,8 @@
   <meta name="author" content="softglow">
 
   
-  <meta name="description" content="In higan&rsquo;s sfc/alt/dsp directory is the alternate SMP emulation core, used
-when the accuracy profile isn&rsquo;t selected. It apparently &hellip;">
+  <meta name="description" content="I was reading around byuu&rsquo;s forum (technically, preparing to make sure my
+question regarding the accuracy of byuu&rsquo;s SMP/DSP vs. blargg& &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,62 @@ when the accuracy profile isn&rsquo;t selected. It apparently &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/14/dsp-emulators/">DSP Emulators</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-14T21:15:00-05:00" pubdate data-updated="true">Nov 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was reading around byuu&rsquo;s forum (technically, preparing to make sure my
+question regarding the accuracy of byuu&rsquo;s SMP/DSP vs. blargg&rsquo;s was in the
+right sub-forum) when I came upon the answer to my question.</p>
+
+<p>To summarize into a a perfect viral posting for social sites&hellip;</p>
+
+<h2>TIL: 3 Amazing Facts About SNES Audio Emulators</h2>
+
+<ol>
+<li>blargg&rsquo;s DSP is 100% pure awesome.</li>
+<li>byuu&rsquo;s SMP is better than blargg&rsquo;s, though.</li>
+<li>byuu&rsquo;s <em>main</em> SMP only has style points over the <em>alt</em> SMP core.  E.g. it
+emulates the <code>TEST</code> register which nobody uses.</li>
+</ol>
+
+
+<h2>So was I wasting my time?</h2>
+
+<p>Partly.  I think extracting <code>sfc/alt/{smp,dsp}</code> is the way to go, which makes
+the deep dive on the main cores mostly irrelevant, but I still got an overview
+of how higan is structured and how its audio path fits in.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -824,6 +880,10 @@ finishing this library.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/14/dsp-emulators/">DSP Emulators</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/12/maybe-ive-been-wasting-my-time/">Maybe I&#8217;ve Been Wasting My Time?</a>
       </li>
     
@@ -837,10 +897,6 @@ finishing this library.</p>
     
       <li class="post">
         <a href="/blog/2013/10/31/brief-intermission/">Brief Intermission</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/26/sndthread-lives/">SndThread Lives</a>
       </li>
     
   </ul>
