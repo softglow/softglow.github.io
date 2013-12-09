@@ -5,13 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Progress Report - softglow's notebook</title>
+  <title>On Break - softglow's notebook</title>
   <meta name="author" content="softglow">
 
   
-  <meta name="description" content="I got the buffer passing code that I described
-on Sunday running. It&rsquo;s important that
-if you&rsquo;re not going to call QIODevice::write to put &hellip;">
+  <meta name="description" content="There&rsquo;s an end-of-year rush on at work, involving a lot of hardcore
+programming leading up to a demo day, so I don&rsquo;t have the bandwidth &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +19,7 @@ if you&rsquo;re not going to call QIODevice::write to put &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://softglow.github.io/blog/2013/10/24/progress-report">
+  <link rel="canonical" href="http://softglow.github.io/blog/2013/12/09/on-break">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="softglow's notebook" type="application/atom+xml">
@@ -70,7 +69,7 @@ if you&rsquo;re not going to call QIODevice::write to put &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Progress Report</h1>
+      <h1 class="entry-title">On Break</h1>
     
     
       <p class="meta">
@@ -86,40 +85,17 @@ if you&rsquo;re not going to call QIODevice::write to put &hellip;">
   
 
 
-<time datetime="2013-10-24T20:02:00-04:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
+<time datetime="2013-12-09T18:46:00-05:00" pubdate data-updated="true">Dec 9<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I got the buffer passing code that I described
-<a href="/blog/2013/10/20/on-qaudiooutput/">on Sunday</a> running.  It&rsquo;s important that
-if you&rsquo;re not going to call <code>QIODevice::write</code> to put data into the
-device&mdash;because, say, you&rsquo;re swapping in a buffer and converting it at
-<code>read()</code> time because, um, you&rsquo;re just doing it wrong&mdash;that you emit the
-<code>readyRead</code> and <code>bytesWritten</code> signals yourself when you swap in a buffer.
-Otherwise, the audio output never gets signaled that the device is readable,
-and stops output after a timeout.</p>
-
-<p>&lt;/tangent&gt;</p>
-
-<p>It turns out that the tone generator I&rsquo;ve connected for testing (to stand in
-for higan) is broken.  Completely busted.  It produces an infinite number of
-repetitions of:</p>
-
-<pre><code>0
-0
--32768
--32768
-</code></pre>
-
-<p>That is <strong>not</strong> a triangle wave.  And since no horrible howl comes out of my
-speakers, either the audio output stage is also broken, or something is
-detecting &ldquo;this makes no sense&rdquo; and sparing my ears.</p>
-
-<p>Oh well.  If I&rsquo;m lucky enough, <em>maybe</em> I&rsquo;ll get to the point where I have an
-SPC player using higan&rsquo;s audio engine by 2014.</p>
+<div class="entry-content"><p>There&rsquo;s an end-of-year rush on at work, involving a lot of hardcore
+programming leading up to a demo day, so I don&rsquo;t have the bandwidth left to
+work hard at home until about Christmas.  Further progress and updates aren&rsquo;t
+expected before then.</p>
 </div>
 
 
@@ -142,7 +118,7 @@ SPC player using higan&rsquo;s audio engine by 2014.</p>
   
 
 
-<time datetime="2013-10-24T20:02:00-04:00" pubdate data-updated="true">Oct 24<span>th</span>, 2013</time>
+<time datetime="2013-12-09T18:46:00-05:00" pubdate data-updated="true">Dec 9<span>th</span>, 2013</time>
       
 
 
@@ -150,7 +126,7 @@ SPC player using higan&rsquo;s audio engine by 2014.</p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://softglow.github.io/blog/2013/10/24/progress-report/" data-via="" data-counturl="http://softglow.github.io/blog/2013/10/24/progress-report/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://softglow.github.io/blog/2013/12/09/on-break/" data-via="" data-counturl="http://softglow.github.io/blog/2013/12/09/on-break/" >Tweet</a>
   
   
   
@@ -159,10 +135,8 @@ SPC player using higan&rsquo;s audio engine by 2014.</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/10/20/on-qaudiooutput/" title="Previous Post: On QAudioOutput">&laquo; On QAudioOutput</a>
+        <a class="basic-alignment left" href="/blog/2013/11/14/dsp-emulators/" title="Previous Post: DSP Emulators">&laquo; DSP Emulators</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/10/26/sndthread-lives/" title="Next Post: SndThread Lives">SndThread Lives &raquo;</a>
       
     </p>
   </footer>

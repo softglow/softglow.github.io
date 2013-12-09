@@ -4,7 +4,7 @@
   <title><![CDATA[softglow's notebook]]></title>
   <link href="http://softglow.github.io/atom.xml" rel="self"/>
   <link href="http://softglow.github.io/"/>
-  <updated>2013-11-14T21:25:30-05:00</updated>
+  <updated>2013-12-09T18:47:44-05:00</updated>
   <id>http://softglow.github.io/</id>
   <author>
     <name><![CDATA[softglow]]></name>
@@ -12,6 +12,18 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[On Break]]></title>
+    <link href="http://softglow.github.io/blog/2013/12/09/on-break/"/>
+    <updated>2013-12-09T18:46:00-05:00</updated>
+    <id>http://softglow.github.io/blog/2013/12/09/on-break</id>
+    <content type="html"><![CDATA[<p>There&rsquo;s an end-of-year rush on at work, involving a lot of hardcore
+programming leading up to a demo day, so I don&rsquo;t have the bandwidth left to
+work hard at home until about Christmas.  Further progress and updates aren&rsquo;t
+expected before then.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[DSP Emulators]]></title>
@@ -37,8 +49,8 @@ emulates the <code>TEST</code> register which nobody uses.</li>
 <h2>So was I wasting my time?</h2>
 
 <p>Partly.  I think extracting <code>sfc/alt/{smp,dsp}</code> is the way to go, which makes
-the deep dive on the main cores mostly irrelevant, but I still got an overview
-of how higan is structured and how its audio path fits in.</p>
+the deep dive on the main cores mostly irrelevant, but everything I needed to
+know to extract them, I still need to know to extract the alt cores.</p>
 ]]></content>
   </entry>
   

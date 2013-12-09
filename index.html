@@ -9,8 +9,8 @@
   <meta name="author" content="softglow">
 
   
-  <meta name="description" content="I was reading around byuu&rsquo;s forum (technically, preparing to make sure my
-question regarding the accuracy of byuu&rsquo;s SMP/DSP vs. blargg& &hellip;">
+  <meta name="description" content="There&rsquo;s an end-of-year rush on at work, involving a lot of hardcore
+programming leading up to a demo day, so I don&rsquo;t have the bandwidth &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +72,45 @@ question regarding the accuracy of byuu&rsquo;s SMP/DSP vs. blargg& &hellip;">
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/12/09/on-break/">On Break</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-09T18:46:00-05:00" pubdate data-updated="true">Dec 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There&rsquo;s an end-of-year rush on at work, involving a lot of hardcore
+programming leading up to a demo day, so I don&rsquo;t have the bandwidth left to
+work hard at home until about Christmas.  Further progress and updates aren&rsquo;t
+expected before then.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/11/14/dsp-emulators/">DSP Emulators</a></h1>
     
     
@@ -114,8 +153,8 @@ emulates the <code>TEST</code> register which nobody uses.</li>
 <h2>So was I wasting my time?</h2>
 
 <p>Partly.  I think extracting <code>sfc/alt/{smp,dsp}</code> is the way to go, which makes
-the deep dive on the main cores mostly irrelevant, but I still got an overview
-of how higan is structured and how its audio path fits in.</p>
+the deep dive on the main cores mostly irrelevant, but everything I needed to
+know to extract them, I still need to know to extract the alt cores.</p>
 </div>
   
   
@@ -739,135 +778,9 @@ call it from a QT program.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/12/synchronization-in-higan-smp-slash-dsp/">Synchronization in Higan (SMP/DSP)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-12T16:04:00-04:00" pubdate data-updated="true">Oct 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Background Matter</h2>
-
-<p>In case you missed my master plan (e.g.: you&rsquo;re reading my Github and were
-never on metconst), I&rsquo;m trying to build a music editor for, at the very least,
-SPC files from Super Metroid.</p>
-
-<p>It seems like the fastest way for such an editor to be able to <em>play</em> the
-music being edited, is to have a real SPC player built-in.  But not one that
-dumps straight to the platform audio output device&mdash;one that buffers into RAM
-to make play/pause and seeking possible.</p>
-
-<p>To that end, I&rsquo;m presently trying to rip the SMP/DSP subsystem out of
-<a href="http://byuu.org/higan/">higan</a> (née bsnes) and pull it into a library that
-runs in a subthread and lets the main thread request blocks of audio from it.</p>
-
-<p>Oh yes, I&rsquo;m going to be building in QT.  I may, or may not, eventually borrow
-some source code from <code>qtractor</code> (certainly not the audio output chain,
-though; AFAIK, if you don&rsquo;t really want audio to play, then JACK is an
-excellent backend for you.)  QT appears to be the one cross-platform library
-that&rsquo;s monolithic enough to be an easy (if fat) install on Windows, that also
-provides everything I absolutely need: threads, audio, GUI widgets, and a C++
-FFI for binding to higan&rsquo;s SMP core.</p>
-
-<h2>Higan v093</h2>
-
-<p>So with that out of the way, let&rsquo;s take a closer look at higan.  I&rsquo;m
-specifically using v093 here, which is, as of late September 2013, the latest
-version published.  I hear it even builds on OS X now.</p>
-
-<p>Why higan?  Accuracy.  There doesn&rsquo;t seem to be any point in going for
-anything less, when I won&rsquo;t have competition for host time from the CPU and
-PPU.  I&rsquo;ve also heard (but been unable to find any trace of the actual <em>code</em>
-involved) that the SMW community came up with some music editor(s) once upon a
-time, but they were based on the ZSNES emulation, and failed hard on the real
-hardware because ZSNES cheated on echo buffering.  Echo didn&rsquo;t get written
-back to PSRAM and destroy the code/instruments under emulation.</p>
-
-<p>That&rsquo;s a mistake that&rsquo;s worth not repeating.</p>
-
-<h3>Synchronization</h3>
-
-<p>higan does threading (when threaded) by using its built-in public domain
-<code>libco</code> (coroutine, I presume) library.  But if you just look at
-<code>sfc/smp/smp.cpp</code> you will find some synchronization functions, but no
-callers&hellip; right there.  And the obvious ones like <code>step()</code> don&rsquo;t seem to do
-much.</p>
-
-<p>There are some more functions in <code>sfc/smp/timing/timing.cpp</code>, but that turns
-out to be a <em>very small</em> file, because it&rsquo;s just providing some more sync
-functions to be called.  The real synchronization is driven from the
-<strong>memory</strong> files, <code>sfc/smp/memory/memory.cpp</code>.  Quoting my notes:</p>
-
-<pre><code>step(clocks): adjusts clocks only, no sync
-cycle_edge: tick SMP timers
-add_clocks: step(); sync DSP; may sync CPU
-...
-add_clocks called in op_{io|read|write}
-</code></pre>
-
-<p>It appears that higan&rsquo;s philosophy is to synchronize <em>the bus state</em> of the
-system.  That is, when a CPU (the S-SMP in the case of audio) makes some sort
-of move like loading the next instruction from memory, it triggers a
-synchronization with the rest of the system.  However many cycles the DSP
-<em>should have taken</em> while that one SMP instruction was running becomes
-accounted for, and the DSP state is &ldquo;caught up&rdquo; so that its <em>current</em> bus
-state will be visible to the emulation of the SMP when the thread returns.</p>
-
-<p>That&rsquo;s pretty much how the main CPU and the SMP are sync&#8217;ed, as well: whenever
-either side writes to an IO port connecting them, at end-of-scanline, and any
-time they get more than 24 samples of audio output out-of-sync.  Or, at every
-bus transaction, if the debugger is built (or maybe enabled?  I forget which.)</p>
-
-<p>I didn&rsquo;t look, but I&rsquo;d guess that&rsquo;s how the CPU and PPU are wired, as well.</p>
-
-<h3>struct Everything</h3>
-
-<p>Apparently in the C++ world, a <code>struct</code> is a <code>class</code> with default-public
-instead of default-private.  byuu uses a lot of <code>struct</code> and very few, if
-<em>any</em>, <code>class</code> keywords.</p>
-
-<p>Why you would use C-compatible keywords to build non-C features?  I&rsquo;m baffled.
-It&rsquo;s just how Bjarne rolls, I guess.</p>
-
-<h3>The Mystery of Privilege</h3>
-
-<p>There&rsquo;s apparently a &ldquo;privileged&rdquo; access modifier.  How this may differ from
-<code>private</code> or <code>protected</code>, I&rsquo;m not really certain, because so far I&rsquo;ve been
-unable to find a description of it online.  It&rsquo;s just too generic a word:
-every discussion of <code>public</code> vs. <code>private</code> tends to use it to talk about
-access control.</p>
-
-<p>Unfortunately, there&rsquo;s a good chance I may <em>need</em> to understand it before
-finishing this library.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -878,6 +791,10 @@ finishing this library.</p>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/09/on-break/">On Break</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/11/14/dsp-emulators/">DSP Emulators</a>
@@ -893,10 +810,6 @@ finishing this library.</p>
     
       <li class="post">
         <a href="/blog/2013/11/04/solved-the-mystery-of-privilege/">Solved: The Mystery of Privilege</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/31/brief-intermission/">Brief Intermission</a>
       </li>
     
   </ul>
