@@ -4,7 +4,7 @@
   <title><![CDATA[softglow's notebook]]></title>
   <link href="http://softglow.github.io/atom.xml" rel="self"/>
   <link href="http://softglow.github.io/"/>
-  <updated>2013-12-09T18:47:44-05:00</updated>
+  <updated>2014-01-06T19:29:58-05:00</updated>
   <id>http://softglow.github.io/</id>
   <author>
     <name><![CDATA[softglow]]></name>
@@ -12,6 +12,50 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[New Year, New Direction]]></title>
+    <link href="http://softglow.github.io/blog/2014/01/06/new-year/"/>
+    <updated>2014-01-06T18:57:00-05:00</updated>
+    <id>http://softglow.github.io/blog/2014/01/06/new-year</id>
+    <content type="html"><![CDATA[<p>Well, it&rsquo;s 2014.  The demo at work went well, the full project is approved,
+there were many celebrations, and a number of small bugs in legacy projects
+got fixed up.  That closes out 2013 and brings me back to normal at work.</p>
+
+<p>The time away from the low-level &ldquo;this is the next thing along this path&rdquo;
+coding at home gave me some time to think about whether that was the right
+path, or even an effective path, and I decided that it really wasn&rsquo;t.</p>
+
+<h2>Repo Shakeup</h2>
+
+<p>To blow off steam between the demo and end of the year, instead of coming back
+to music, I wrote my first-ever hack:
+<a href="https://github.com/softglow/sm-item-pass-blocks">Item-passable blocks</a> which
+act as air when Samus has a specific piece of equipment enabled.</p>
+
+<p>Then, I deleted the <code>alien-spc</code> repo.  The idea of one great GUI that allowed
+for awesome editing (and &ldquo;random seeking&rdquo; via emulating from zero-to-playhead
+in a background thread) would have been technically awesome, but after
+spending over a month just getting the capability to pass audio between
+threads&mdash;-without any actual emulation happening&mdash;-it was clear that this was
+the <em>long, slow</em> way around.</p>
+
+<p>In place of that, there&rsquo;s
+<a href="https://github.com/softglow/midi-spc-kit/tree/wip">midi-spc-kit</a>.  My vision
+for this is a pair of Python scripts (sharing some common library code in
+<code>midi_spc</code>), one to handle copying from a MIDI to an SPC image, and one to
+handle copying changes made in the SPC image back into the game ROM.</p>
+
+<h2>MIDI for tracker music?</h2>
+
+<p>I actually plan to parse the MIDI event stream and automatically find the
+pattern/track/song loop points, to optimize the SPC output.  Size is going to
+matter.</p>
+
+<p>And with that&hellip; Happy 2014!  Let&rsquo;s see if I finish anything music related
+<strong>this</strong> year!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[On Break]]></title>

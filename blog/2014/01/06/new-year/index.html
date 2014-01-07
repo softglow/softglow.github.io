@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>DSP Emulators - softglow's notebook</title>
+  <title>New Year, New Direction - softglow's notebook</title>
   <meta name="author" content="softglow">
 
   
-  <meta name="description" content="I was reading around byuu&rsquo;s forum (technically, preparing to make sure my
-question regarding the accuracy of byuu&rsquo;s SMP/DSP vs. blargg& &hellip;">
+  <meta name="description" content="Well, it&rsquo;s 2014. The demo at work went well, the full project is approved,
+there were many celebrations, and a number of small bugs in legacy &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@ question regarding the accuracy of byuu&rsquo;s SMP/DSP vs. blargg& &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://softglow.github.io/blog/2013/11/14/dsp-emulators">
+  <link rel="canonical" href="http://softglow.github.io/blog/2014/01/06/new-year">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="softglow's notebook" type="application/atom+xml">
@@ -69,7 +69,7 @@ question regarding the accuracy of byuu&rsquo;s SMP/DSP vs. blargg& &hellip;">
   
   <header>
     
-      <h1 class="entry-title">DSP Emulators</h1>
+      <h1 class="entry-title">New Year, New Direction</h1>
     
     
       <p class="meta">
@@ -85,34 +85,49 @@ question regarding the accuracy of byuu&rsquo;s SMP/DSP vs. blargg& &hellip;">
   
 
 
-<time datetime="2013-11-14T21:15:00-05:00" pubdate data-updated="true">Nov 14<span>th</span>, 2013</time>
+<time datetime="2014-01-06T18:57:00-05:00" pubdate data-updated="true">Jan 6<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I was reading around byuu&rsquo;s forum (technically, preparing to make sure my
-question regarding the accuracy of byuu&rsquo;s SMP/DSP vs. blargg&rsquo;s was in the
-right sub-forum) when I came upon the answer to my question.</p>
+<div class="entry-content"><p>Well, it&rsquo;s 2014.  The demo at work went well, the full project is approved,
+there were many celebrations, and a number of small bugs in legacy projects
+got fixed up.  That closes out 2013 and brings me back to normal at work.</p>
 
-<p>To summarize into a a perfect viral posting for social sites&hellip;</p>
+<p>The time away from the low-level &ldquo;this is the next thing along this path&rdquo;
+coding at home gave me some time to think about whether that was the right
+path, or even an effective path, and I decided that it really wasn&rsquo;t.</p>
 
-<h2>TIL: 3 Amazing Facts About SNES Audio Emulators</h2>
+<h2>Repo Shakeup</h2>
 
-<ol>
-<li>blargg&rsquo;s DSP is 100% pure awesome.</li>
-<li>byuu&rsquo;s SMP is better than blargg&rsquo;s, though.</li>
-<li>byuu&rsquo;s <em>main</em> SMP only has style points over the <em>alt</em> SMP core.  E.g. it
-emulates the <code>TEST</code> register which nobody uses.</li>
-</ol>
+<p>To blow off steam between the demo and end of the year, instead of coming back
+to music, I wrote my first-ever hack:
+<a href="https://github.com/softglow/sm-item-pass-blocks">Item-passable blocks</a> which
+act as air when Samus has a specific piece of equipment enabled.</p>
 
+<p>Then, I deleted the <code>alien-spc</code> repo.  The idea of one great GUI that allowed
+for awesome editing (and &ldquo;random seeking&rdquo; via emulating from zero-to-playhead
+in a background thread) would have been technically awesome, but after
+spending over a month just getting the capability to pass audio between
+threads&mdash;-without any actual emulation happening&mdash;-it was clear that this was
+the <em>long, slow</em> way around.</p>
 
-<h2>So was I wasting my time?</h2>
+<p>In place of that, there&rsquo;s
+<a href="https://github.com/softglow/midi-spc-kit/tree/wip">midi-spc-kit</a>.  My vision
+for this is a pair of Python scripts (sharing some common library code in
+<code>midi_spc</code>), one to handle copying from a MIDI to an SPC image, and one to
+handle copying changes made in the SPC image back into the game ROM.</p>
 
-<p>Partly.  I think extracting <code>sfc/alt/{smp,dsp}</code> is the way to go, which makes
-the deep dive on the main cores mostly irrelevant, but everything I needed to
-know to extract them, I still need to know to extract the alt cores.</p>
+<h2>MIDI for tracker music?</h2>
+
+<p>I actually plan to parse the MIDI event stream and automatically find the
+pattern/track/song loop points, to optimize the SPC output.  Size is going to
+matter.</p>
+
+<p>And with that&hellip; Happy 2014!  Let&rsquo;s see if I finish anything music related
+<strong>this</strong> year!</p>
 </div>
 
 
@@ -135,7 +150,7 @@ know to extract them, I still need to know to extract the alt cores.</p>
   
 
 
-<time datetime="2013-11-14T21:15:00-05:00" pubdate data-updated="true">Nov 14<span>th</span>, 2013</time>
+<time datetime="2014-01-06T18:57:00-05:00" pubdate data-updated="true">Jan 6<span>th</span>, 2014</time>
       
 
 
@@ -143,7 +158,7 @@ know to extract them, I still need to know to extract the alt cores.</p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://softglow.github.io/blog/2013/11/14/dsp-emulators/" data-via="" data-counturl="http://softglow.github.io/blog/2013/11/14/dsp-emulators/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://softglow.github.io/blog/2014/01/06/new-year/" data-via="" data-counturl="http://softglow.github.io/blog/2014/01/06/new-year/" >Tweet</a>
   
   
   
@@ -152,10 +167,8 @@ know to extract them, I still need to know to extract the alt cores.</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/11/12/maybe-ive-been-wasting-my-time/" title="Previous Post: Maybe I've been wasting my time?">&laquo; Maybe I've been wasting my time?</a>
+        <a class="basic-alignment left" href="/blog/2013/12/09/on-break/" title="Previous Post: On Break">&laquo; On Break</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/12/09/on-break/" title="Next Post: On Break">On Break &raquo;</a>
       
     </p>
   </footer>

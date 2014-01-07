@@ -9,8 +9,8 @@
   <meta name="author" content="softglow">
 
   
-  <meta name="description" content="There&rsquo;s an end-of-year rush on at work, involving a lot of hardcore
-programming leading up to a demo day, so I don&rsquo;t have the bandwidth &hellip;">
+  <meta name="description" content="Well, it&rsquo;s 2014. The demo at work went well, the full project is approved,
+there were many celebrations, and a number of small bugs in legacy &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,77 @@ programming leading up to a demo day, so I don&rsquo;t have the bandwidth &helli
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/06/new-year/">New Year, New Direction</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-06T18:57:00-05:00" pubdate data-updated="true">Jan 6<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Well, it&rsquo;s 2014.  The demo at work went well, the full project is approved,
+there were many celebrations, and a number of small bugs in legacy projects
+got fixed up.  That closes out 2013 and brings me back to normal at work.</p>
+
+<p>The time away from the low-level &ldquo;this is the next thing along this path&rdquo;
+coding at home gave me some time to think about whether that was the right
+path, or even an effective path, and I decided that it really wasn&rsquo;t.</p>
+
+<h2>Repo Shakeup</h2>
+
+<p>To blow off steam between the demo and end of the year, instead of coming back
+to music, I wrote my first-ever hack:
+<a href="https://github.com/softglow/sm-item-pass-blocks">Item-passable blocks</a> which
+act as air when Samus has a specific piece of equipment enabled.</p>
+
+<p>Then, I deleted the <code>alien-spc</code> repo.  The idea of one great GUI that allowed
+for awesome editing (and &ldquo;random seeking&rdquo; via emulating from zero-to-playhead
+in a background thread) would have been technically awesome, but after
+spending over a month just getting the capability to pass audio between
+threads&mdash;-without any actual emulation happening&mdash;-it was clear that this was
+the <em>long, slow</em> way around.</p>
+
+<p>In place of that, there&rsquo;s
+<a href="https://github.com/softglow/midi-spc-kit/tree/wip">midi-spc-kit</a>.  My vision
+for this is a pair of Python scripts (sharing some common library code in
+<code>midi_spc</code>), one to handle copying from a MIDI to an SPC image, and one to
+handle copying changes made in the SPC image back into the game ROM.</p>
+
+<h2>MIDI for tracker music?</h2>
+
+<p>I actually plan to parse the MIDI event stream and automatically find the
+pattern/track/song loop points, to optimize the SPC output.  Size is going to
+matter.</p>
+
+<p>And with that&hellip; Happy 2014!  Let&rsquo;s see if I finish anything music related
+<strong>this</strong> year!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -643,141 +714,6 @@ program around it yet.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/13/libco-sync-via-calling/">Libco: Sync via Calling Without Endless Recursion</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-13T18:37:00-04:00" pubdate data-updated="true">Oct 13<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Continuing our discussion of <a href="http://byuu.org/higan/">higan</a> from
-<a href="/blog/2013/10/12/synchronization-in-higan-smp-slash-dsp/">yesterday</a>, let’s
-take a moment to look deeper into the abyss.</p>
-
-<h2>SMP::Threaded</h2>
-
-<p>This isn’t pthreads or anything; it’s <code>libco</code> threads.  libco appears to be
-named for <em>coroutines</em> and focuses on user-space or “green” threading rather
-than OS threads.  In fact, libco ships with generic implementations for
-Windows using fibers, and for GCC using a GNU Pth inspired setjmp/longjmp
-technique.  Including a little trickery with <code>sigaltstack</code> to actually set up
-the alternate allocation as a stack.</p>
-
-<p>AFAICT, everything is set up with <code>Threaded=true</code> and the emulator would
-actually break if it were otherwise.  Everything would keep calling
-<code>thing.enter()</code> until eventually the emulator ran out of stack space and
-crashed.</p>
-
-<h2>Tracing cpu.add_clocks</h2>
-
-<p>From our previous post, we know that <code>add_clocks</code> is called when the CPU needs
-to perform bus operations, so our adventure today really begins with the
-implementation of this function, inside <code>sfc/cpu/timing/timing.cpp</code>.</p>
-
-<p>The function starts off by unlocking IRQs, then computing a number of ticks
-(which is just <code>clocks/2</code>), and calling <code>tick()</code> for each tick.  tick itself
-merely updates the horizontal and vertical counters, essentially keeping track
-of where the raster scanout is happening in the PPU.  (It was hard to find;
-it’s in <code>sfc/ppu/counter/counter-inline.hpp</code> which <code>CPU</code> inherits, and it’s
-loaded in via <code>sfc/sfc.hpp</code> and <code>sfc/cpu/cpu.cpp</code>.)</p>
-
-<p>After ticking, the step function is called, which reduces the clock cycle of
-each active subsystem (SMP, PPU, and any coprocessors present) before
-synchronizing the controllers.  Next, the joysticks are polled every 256
-clocks, DRAM refreshed when needed (at a cost of 40 more cycles), and when
-<code>DEBUGGER</code> is defined, all the other chips are fully synchronized again.</p>
-
-<h2>clocks, then&hellip;</h2>
-
-<p>It appears that the clocks are tracking “cycles ahead/behind in emulation:”
-where “0” means perfectly synchronized with the current CPU state, negative
-means the given part is behind, and of course, positive means ahead.  When the
-CPU runs, it reduces the <code>smp.clock</code> and <code>dsp.clock</code> values, and when the SMP
-gets a chance to run, it increases its <code>smp.clock</code> value.  When it crosses 0,
-then the SMP is synchronized, and if the synchronization mode calls for it,
-emulation will sync up the DSP (by the same mechanism: the SMP has been
-decrementing clocks, so when sync happens, the DSP increments its clock
-value), then return to the CPU.</p>
-
-<h2>Synchronization points</h2>
-
-<p>The SMP is actually invoked to re-sync itself with the main CPU whenever the
-chips need to communicate (i.e. if the CPU wants to read or write the SMP IO
-ports), on each new scanline (when tick brings the hcounter back to 0), and on
-a debug build, every time the CPU is updated.  I presume that last one keeps
-everything in perfect sync from the debugger’s point of view.</p>
-
-<p>The CPU calls to <code>synchronize_smp()</code> in <code>sfc/cpu/mmio/mmio.cpp</code> (for port
-access) and <code>sfc/cpu/timing/timing.cpp</code> for the other cases.</p>
-
-<p>Meanwhile, the SMP subsystem returns the favor by calling <code>synchronize_cpu</code>
-from <code>SMP::add_clocks</code> in <code>sfc/smp/timing.cpp</code>—either every sample produced in
-debug builds, or after 24 samples—and from <code>sfc/smp/memory.cpp</code> on port IO.</p>
-
-<h2>Wait, your post’s title was libco, wtf dude?</h2>
-
-<p>The synchronization points listed above bring us back to libco.  If the CPU
-calls <em>into</em> the SMP to synchronize it, and it calls <em>into</em> the CPU afterward,
-then the call stack is going to get infinitely deep.  In this contrived case
-where I ignore a whole lot of stuff (both the other hardware, and the rest of
-the call stack involved in actually emulating the SMP/CPU between calls to
-enter), the stack would get filled up looking like:</p>
-
-<pre><code>inside smp.enter
-inside cpu.enter
-inside smp.enter
-inside cpu.enter
-inside smp.enter
-inside cpu.enter
-…
-</code></pre>
-
-<p>When it eventually exhausted the stack limit, the process would receive a
-segfault and most likely, unceremoniously die after emulating a finite number
-of cycles.  That’s where <code>libco</code> comes in.</p>
-
-<p>Because <code>Threaded</code> is always true, direct calls aren’t made; they’re sent
-through <code>co_switch</code> instead, which does some trickery to swap out the “thread”
-that is running the active processor, and replace it with the thread of the
-target.</p>
-
-<p>Instead of pushing a frame onto the <em>current</em> stack and starting the target
-function anew, <code>libco</code> allows for suspending the current thread+stack
-entirely, (re)loading the other one, and resuming it—exactly as if <em>it</em> had
-called and returned, except this appears in C++ as a call and call.</p>
-
-<p>This gives byuu a lot of freedom to just call <code>synchronize_thing</code> all over the
-place without worrying, because it’s not consuming a limited amount of call
-depth to do so.  But it makes it a little harder to just yank out the code and
-call it from a QT program.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -791,6 +727,10 @@ call it from a QT program.</p>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/06/new-year/">New Year, New Direction</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/12/09/on-break/">On Break</a>
@@ -808,10 +748,6 @@ call it from a QT program.</p>
         <a href="/blog/2013/11/07/where-the-samples-are/">Where the Samples Are</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/11/04/solved-the-mystery-of-privilege/">Solved: The Mystery of Privilege</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -825,7 +761,7 @@ call it from a QT program.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - softglow -
+  Copyright &copy; 2014 - softglow -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
